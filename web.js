@@ -58,7 +58,7 @@ get_render_meetup = function(req, res) {
 
 	get_events = function(callback) {
 		meetup.getEvents(events_query, function(err,events) {
-			//console.log(events);
+			console.log(events);
 			get_rsvps(events.results[0].id, callback)
 		});
 	};
@@ -67,6 +67,7 @@ get_render_meetup = function(req, res) {
 		res.render('meetup', { title: events_query.group_urlname, res: str});
 	};
 
+	events_query.group_urlname = req.params.meetup;
 	get_events(do_render);
 };
 	
