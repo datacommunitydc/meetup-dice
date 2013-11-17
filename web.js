@@ -3,7 +3,7 @@
  */
 
 var express = require('express');
-var routes = require('./routes');
+//var routes = require('./routes');
 //var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
@@ -34,22 +34,40 @@ var events_query = {
 var rsvp_query = {
 	'event_id' : "0",
 	'rsvp' : 'yes',
+	'page' : '1000',
 	'only' : 'member,member_photo'
 };
 
+var groups_query = {
+	'member_id' : 'self',
+	'only' : 'name,urlname,group_photo'
+}
 
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
+get_render_meetup_list = function(req, res) {
+	get_groups = function(callback) {
+		meetup.getGroups(groups_query, function(err, groups) {
+			console.log(groups);
+			callback(groups.results);
+		})
+	};
+	do_render = function(str) {
+		res.render('index', { title : 'Meetup Dice', res : str})
+	};
+	get_groups(do_render);
+};
+
+app.get('/', get_render_meetup_list);
 
 get_render_meetup = function(req, res) {
 	get_rsvps = function(event_id, callback) {
 		rsvp_query.event_id = event_id;
 		meetup.getRVSPs(rsvp_query, function(err, rsvps) {
-			// console.log(rsvps);
+			console.log(rsvps.results.length);
 			random_rsvp = rsvps.results[Math.floor(Math.random() * rsvps.results.length)];
 			//console.log(random_rsvp);
 			typeof callback === 'function' && callback(random_rsvp);
@@ -59,7 +77,11 @@ get_render_meetup = function(req, res) {
 	get_events = function(callback) {
 		meetup.getEvents(events_query, function(err,events) {
 			console.log(events);
-			get_rsvps(events.results[0].id, callback)
+			if (events.results.length == 0) {
+				res.status(404).send('Unknown Meetup'); // doesn't work?!
+			} else {
+				get_rsvps(events.results[0].id, callback)
+			};
 		});
 	};
 

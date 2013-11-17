@@ -1,5 +1,10 @@
 extends layout
 
 block content
-  h1= res.member.name
-  img(src='#{res.member_photo.highres_link}')
+  
+
+  h1 Winner: #{res.member.name}
+  img(src='#{res.member_photo.thumb_link}')
+
+  a(href='/')
+    p Home
