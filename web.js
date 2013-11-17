@@ -17,26 +17,28 @@ var rsvp_query = {
 	'only' : 'member,member_photo'
 };
 
-get_rsvps = function(event_id) {
-	rsvp_query.event_id = event_id;
-	meetup.getRVSPs(rsvp_query, function(err, rsvps) {
-		// console.log(rsvps);
-		random_rsvp = rsvps.results[Math.floor(Math.random() * rsvps.results.length)];
-		//console.log(random_rsvp);
-		return random_rsvp;
-	});
-};
 
-get_events = function() {
-	meetup.getEvents(events_query, function(err,events) {
-		// console.log(events);
-		get_rsvps(events.results[0].id)
-	});
-}
 
 
 app.get('/', function(request, response) {
-  response.send('Hello World!');
+	get_rsvps = function(event_id, callback) {
+		rsvp_query.event_id = event_id;
+		meetup.getRVSPs(rsvp_query, function(err, rsvps) {
+			// console.log(rsvps);
+			random_rsvp = rsvps.results[Math.floor(Math.random() * rsvps.results.length)];
+			console.log(random_rsvp);
+			typeof callback === 'function' && callback(random_rsvp);
+		});
+	};
+
+	get_events = function(callback) {
+		meetup.getEvents(events_query, function(err,events) {
+			console.log(events);
+			get_rsvps(events.results[0].id, callback)
+		});
+	}
+	
+  get_events(response.json);
 });
 
 var port = process.env.PORT || 5000;
