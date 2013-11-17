@@ -44,9 +44,34 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/:meetup', function(req,res) {
-	res.render('meetup', { title: events_query.group_urlname, meetup: events_query.group_urlname});
-});
+
+get_render_meetup = function(req, res) {
+	get_rsvps = function(event_id, callback) {
+		rsvp_query.event_id = event_id;
+		meetup.getRVSPs(rsvp_query, function(err, rsvps) {
+			// console.log(rsvps);
+			random_rsvp = rsvps.results[Math.floor(Math.random() * rsvps.results.length)];
+			//console.log(random_rsvp);
+			typeof callback === 'function' && callback(random_rsvp);
+		});
+	};
+
+	get_events = function(callback) {
+		meetup.getEvents(events_query, function(err,events) {
+			//console.log(events);
+			get_rsvps(events.results[0].id, callback)
+		});
+	};
+
+	do_render = function(str) {
+		res.render('meetup', { title: events_query.group_urlname, res: str});
+	};
+
+	get_events(do_render);
+};
+	
+
+app.get('/:meetup', get_render_meetup);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
@@ -54,22 +79,6 @@ http.createServer(app).listen(app.get('port'), function(){
 
 
 // app.get('/', function(request, response) {
-// 	get_rsvps = function(event_id, callback) {
-// 		rsvp_query.event_id = event_id;
-// 		meetup.getRVSPs(rsvp_query, function(err, rsvps) {
-// 			// console.log(rsvps);
-// 			random_rsvp = rsvps.results[Math.floor(Math.random() * rsvps.results.length)];
-// 			console.log(random_rsvp);
-// 			typeof callback === 'function' && callback(random_rsvp);
-// 		});
-// 	};
-
-// 	get_events = function(callback) {
-// 		meetup.getEvents(events_query, function(err,events) {
-// 			console.log(events);
-// 			get_rsvps(events.results[0].id, callback)
-// 		});
-// 	}
 
 //   get_events(response.json);
 // });

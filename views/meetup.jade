@@ -1,5 +1,5 @@
 extends layout
 
 block content
-  h1= meetup
-  p Welcome to #{meetup}
+  h1= res.member.name
+  img(src='#{res.member_photo.highres_link}')
