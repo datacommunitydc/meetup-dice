@@ -64,13 +64,13 @@ get_render_meetup_list = function(req, res) {
 app.get('/', get_render_meetup_list);
 
 get_render_meetup = function(req, res) {
-	get_rsvps = function(event_id, callback) {
-		rsvp_query.event_id = event_id;
+	get_rsvps = function(evnt, callback) {
+		rsvp_query.event_id = evnt.id;
 		meetup.getRVSPs(rsvp_query, function(err, rsvps) {
 			console.log(rsvps.results.length);
 			random_rsvp = rsvps.results[Math.floor(Math.random() * rsvps.results.length)];
 			//console.log(random_rsvp);
-			typeof callback === 'function' && callback(random_rsvp);
+			typeof callback === 'function' && callback(evnt, random_rsvp);
 		});
 	};
 
@@ -80,13 +80,13 @@ get_render_meetup = function(req, res) {
 			if (events.results.length == 0) {
 				res.status(404).send('Unknown Meetup'); // doesn't work?!
 			} else {
-				get_rsvps(events.results[0].id, callback)
+				get_rsvps(events.results[0], callback)
 			};
 		});
 	};
 
-	do_render = function(str) {
-		res.render('meetup', { title: events_query.group_urlname, res: str});
+	do_render = function(evnt, rsvp) {
+		res.render('meetup', { title: events_query.group_urlname, event: evnt, rsvp: rsvp});
 	};
 
 	events_query.group_urlname = req.params.meetup;
