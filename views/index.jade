@@ -3,6 +3,7 @@ extends layout
 block content
   h1 Roll the Meetup Dice!
   - each grp in res
-    a(href='/#{grp.urlname}')
-      p=grp.name
-      img(src='#{grp.group_photo.thumb_link}')
+    .grp
+      a(href='/#{grp.urlname}')
+        p=grp.name
+        img(src='#{grp.group_photo.thumb_link}')

@@ -1,18 +1,18 @@
 extends layout
 
 block content
-  .eventdesc
+  #eventdesc
     h1= event.name
     p #{event.yes_rsvp_count} RSVPs
 
-  .winner
+  #winner
     h1 Winner: #{rsvp.member.name}
-    img(src='#{rsvp.member_photo.thumb_link}')
+    img.member(src='#{rsvp.member_photo.photo_link}')
 
-  .links
-    a(href='/#{title}')
+  #links
+    a.button#rollagain(href='/#{title}')
       p Roll again
 
-    a(href='/')
+    a.button#home(href='/')
       p Home
 
