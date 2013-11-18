@@ -7,7 +7,10 @@ block content
 
   #winner
     h1 Winner: #{rsvp.member.name}
-    img.member(src='#{rsvp.member_photo.photo_link}')
+    if rsvp.member_photo
+      img.member(src='#{rsvp.member_photo.photo_link}')
+    else
+      p (no photo)
 
   #links
     a.button#rollagain(href='/#{title}')
