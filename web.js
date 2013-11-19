@@ -8,6 +8,8 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 
+var cache = require('easy-cache');
+
 var app = express();
 
 // all environments
@@ -79,34 +81,57 @@ get_render_meetup = function(req, res) {
 				get_rsvps(evnt, callback, offset+1, rsvplist);
 			} else {
 				// done
-				console.log("base case");
-				random_rsvp = rsvplist[Math.floor(Math.random() * rsvplist.length)];
+				console.log("base case -- caching and returning");
+				console.log(evnt, rsvplist);
+				cache.set(evnt, rsvplist); //, 60 * 1000);
+				console.log(cache.exists(evnt));
+				//console.log(cache.get("test1"));
 				//console.log(random_rsvp);
-				typeof callback === 'function' && callback(evnt, random_rsvp);
+				typeof callback === 'function' && callback(evnt, rsvplist);
 			}
 		});
 	};
 
 	get_events = function(callback) {
+		cache.set("test1", "answer1");
 		meetup.getEvents(events_query, function(err,events) {
 			// console.log(events);
 			if (events.results.length == 0) {
 				res.status(404).send('Unknown Meetup'); // doesn't work?!
 			} else {
-				get_rsvps(events.results[0], callback, 0, [])
+				if (cache.exists(events.results[0])) {
+					// skip to returning the answer
+					console.log("cache hit!");
+					typeof callback === 'function' && callback(events.results[0], cache.get(events.results[0]));
+				} else {
+					// the hard way
+					console.log("cache miss");
+					//console.log(cache.get("test1"));
+					console.log(events.results[0]);
+					get_rsvps(events.results[0], callback, 0, [])
+				}
+				
 			};
 		});
 	};
 
+	do_render_wrapper = function(evnt, rsvplist) {
+		random_rsvp = rsvplist[Math.floor(Math.random() * rsvplist.length)];
+		do_render(evnt, random_rsvp);
+	}
 	do_render = function(evnt, rsvp) {
 		res.render('meetup', { title: events_query.group_urlname, event: evnt, rsvp: rsvp});
 	};
 
 	console.log("Requested " + req.params.meetup);
 	events_query.group_urlname = req.params.meetup;
-	get_events(do_render);
+	get_events(do_render_wrapper);
 };
-	
+
+cache.set("test2", "result2");
+cache.set("test3", "result3", 60000);
+console.log(cache.exists("test2"), cache.get("test2"));
+console.log(cache.exists("test3"));
 
 app.get('/:meetup', get_render_meetup);
 
