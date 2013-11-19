@@ -8,5 +8,6 @@ block content
         each grp in res.slice(i, i+3)
           .col-md-4.grp
             a(href='/#{grp.urlname}')
-              p=grp.name
-              img(src='#{grp.group_photo.thumb_link}')
+              .imgcont
+                img.grp(src='#{grp.group_photo.photo_link}')
+                p.grpname=grp.name
