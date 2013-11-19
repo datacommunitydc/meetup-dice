@@ -3,5 +3,32 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css')
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css')
+    script(src="http://code.jquery.com/jquery-1.10.1.min.js")
+    script(src="http://code.jquery.com/jquery-migrate-1.2.1.min.js")
+    script(src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js")
+    
   body
+    nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
+      a.navbar-brand(href="/") Meetup Dice!
+      a.button.btn.navbar-right#aboutbtn(data-toggle="modal" data-target="#about") About
+
     block content
+
+    .modal.fade#about(tabindex="-1" role="dialog" aria-labelledby="about" aria-hidden="true")
+        .modal-dialog
+          .modal-content
+            .modal-header
+              button.close(type='button' data-dismiss='modal' aria-hidden='true') &times;
+              h4.modal-title#myModalLabel About Meetup Dice
+            .modal-body
+              p Meetup Dice is a simple application for picking a random RSVP'd member from a Meetup.
+              
+              p <a href='https://github.com/harlanh/meetup-dice'>Github source</a>
+              
+              p
+                | By <a href="http://github.com/HarlanH">Harlan Harris</a>, for 
+                | <a href="http://datacommunitydc.org">Data Community DC</a>.
+            .modal-fooder
+              button.btn.btn-default(type='button' data-dismiss='modal') Close
