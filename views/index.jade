@@ -1,11 +1,12 @@
 extends layout
 
 block content
-  - each grp in res
-    .grp
-      a(href='/#{grp.urlname}')
-        p=grp.name
-        img(src='#{grp.group_photo.thumb_link}')
-
-#  a(href='https://github.com/harlanh/meetup-dice')
-#    img(style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub")
+  - var i = -3;
+    while i <= res.length
+      - i += 3;
+      .row
+        each grp in res.slice(i, i+3)
+          .col-md-4.grp
+            a(href='/#{grp.urlname}')
+              p=grp.name
+              img(src='#{grp.group_photo.thumb_link}')
