@@ -34,7 +34,8 @@ var events_query = {
 var rsvp_query = {
 	'event_id' : "0",
 	'rsvp' : 'yes',
-	'page' : '1000',
+	'page' : '200',
+	'offset': 0,
 	'only' : 'member,member_photo'
 };
 
@@ -64,13 +65,25 @@ get_render_meetup_list = function(req, res) {
 app.get('/', get_render_meetup_list);
 
 get_render_meetup = function(req, res) {
-	get_rsvps = function(evnt, callback) {
+	get_rsvps = function(evnt, callback, offset, rsvplist) {
 		rsvp_query.event_id = evnt.id;
+		rsvp_query.offset = offset;
+		console.log(rsvp_query);
 		meetup.getRVSPs(rsvp_query, function(err, rsvps) {
-			// console.log(rsvps.results.length);
-			random_rsvp = rsvps.results[Math.floor(Math.random() * rsvps.results.length)];
-			//console.log(random_rsvp);
-			typeof callback === 'function' && callback(evnt, random_rsvp);
+			// console.log(rsvps); // lengthy...
+			rsvplist = rsvplist.concat(rsvps.results);
+			console.log("list length = " + rsvplist.length);
+			if ((offset+1) * 200 < evnt.yes_rsvp_count) {
+				// recurse
+				console.log("recursing");
+				get_rsvps(evnt, callback, offset+1, rsvplist);
+			} else {
+				// done
+				console.log("base case");
+				random_rsvp = rsvplist[Math.floor(Math.random() * rsvplist.length)];
+				//console.log(random_rsvp);
+				typeof callback === 'function' && callback(evnt, random_rsvp);
+			}
 		});
 	};
 
@@ -80,7 +93,7 @@ get_render_meetup = function(req, res) {
 			if (events.results.length == 0) {
 				res.status(404).send('Unknown Meetup'); // doesn't work?!
 			} else {
-				get_rsvps(events.results[0], callback)
+				get_rsvps(events.results[0], callback, 0, [])
 			};
 		});
 	};
