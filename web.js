@@ -82,9 +82,9 @@ get_render_meetup = function(req, res) {
 			} else {
 				// done
 				console.log("base case -- caching and returning");
-				console.log(evnt, rsvplist);
-				cache.set(evnt, rsvplist); //, 60 * 1000);
-				console.log(cache.exists(evnt));
+				// console.log(evnt, rsvplist);
+				cache.set(JSON.stringify(evnt), rsvplist, 60 * 1000);
+				// console.log(cache.exists(evnt));
 				//console.log(cache.get("test1"));
 				//console.log(random_rsvp);
 				typeof callback === 'function' && callback(evnt, rsvplist);
@@ -93,16 +93,17 @@ get_render_meetup = function(req, res) {
 	};
 
 	get_events = function(callback) {
-		cache.set("test1", "answer1");
+		console.log(events_query);
 		meetup.getEvents(events_query, function(err,events) {
 			// console.log(events);
 			if (events.results.length == 0) {
 				res.status(404).send('Unknown Meetup'); // doesn't work?!
 			} else {
-				if (cache.exists(events.results[0])) {
+				if (cache.exists(JSON.stringify(events.results[0]))) {
 					// skip to returning the answer
 					console.log("cache hit!");
-					typeof callback === 'function' && callback(events.results[0], cache.get(events.results[0]));
+					typeof callback === 'function' && callback(events.results[0], 
+						cache.get(JSON.stringify(events.results[0])));
 				} else {
 					// the hard way
 					console.log("cache miss");
@@ -127,11 +128,6 @@ get_render_meetup = function(req, res) {
 	events_query.group_urlname = req.params.meetup;
 	get_events(do_render_wrapper);
 };
-
-cache.set("test2", "result2");
-cache.set("test3", "result3", 60000);
-console.log(cache.exists("test2"), cache.get("test2"));
-console.log(cache.exists("test3"));
 
 app.get('/:meetup', get_render_meetup);
 

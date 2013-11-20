@@ -8,6 +8,6 @@
     "express": "3.4.4",
     "meetup-api": "0.1.1",
     "jade": "*",
-    "easy-cache": "0.0.1"
+    "easy-cache": "0.1.0"
   }
 }
