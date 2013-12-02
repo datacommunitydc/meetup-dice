@@ -117,11 +117,10 @@ get_render_meetup = function(req, res) {
 	};
 
 	do_render_wrapper = function(evnt, rsvplist) {
-		random_rsvp = rsvplist[Math.floor(Math.random() * rsvplist.length)];
-		do_render(evnt, random_rsvp);
+		do_render(evnt, rsvplist);
 	}
-	do_render = function(evnt, rsvp) {
-		res.render('meetup', { title: events_query.group_urlname, event: evnt, rsvp: rsvp});
+	do_render = function(evnt, rsvplist) {
+		res.render('meetup', { title: events_query.group_urlname, event: evnt, rsvplist: rsvplist});
 	};
 
 	console.log("Requested " + req.params.meetup);
