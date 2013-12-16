@@ -6,15 +6,20 @@ block content
     p #{event.yes_rsvp_count} RSVPs
 
   #winner
-    h1 Winner: #{rsvp.member.name}
-    if rsvp.member_photo
-      img.member(src='#{rsvp.member_photo.photo_link}')
-    else
-      p (no photo)
+    h1 Winner is ...?
+    img.member(src='/images/default.jpg')
 
   #links
-    a.button#rollagain(href='/#{title}')
-      p Roll again
-
-
-
+    .btn-group
+      button.btn.btn-danger.btn-lg#rolling Start Rolling
+    .btn-group
+      button.btn.btn-danger.btn-lg#stop Stop
+  p
+  
+  #list
+    each val in rsvplist
+      .member-cell
+        if val.member_photo
+          img.list(src='#{val.member_photo.photo_link}', title='#{val.member.name}')
+        else
+          img.list(src='/images/default.jpg', title='#{val.member.name}')
