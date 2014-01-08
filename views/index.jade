@@ -9,5 +9,7 @@ block content
           .col-md-4.grp
             a(href='/#{grp.urlname}')
               .imgcont
-                img.grp(src='#{grp.group_photo.photo_link}')
+                - if (typeof(grp.group_photo) !== 'undefined'){
+                  img.grp(src='#{grp.group_photo.photo_link}')
+                -}
                 p.grpname=grp.name
