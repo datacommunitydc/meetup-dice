@@ -7,7 +7,7 @@ By [Harlan Harris](http://github.com/HarlanH), for [Data Community DC](http://da
 
 Contributors:
 
-    [Devin Castro](http://github.com/ddcast)
+[Devin Castro](http://github.com/ddcast)
 
 To run locally:
 
