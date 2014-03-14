@@ -97,7 +97,7 @@ get_render_meetup = function(req, res) {
 		meetup.getEvents(events_query, function(err,events) {
 			// console.log(events);
 			if (events.results.length == 0) {
-				res.status(404).send('Unknown Meetup'); // doesn't work?!
+				res.status(404).render('404', { title : 'Not found - Meetup Dice' }) // doesn't work?!
 			} else {
 				if (cache.exists(JSON.stringify(events.results[0]))) {
 					// skip to returning the answer
