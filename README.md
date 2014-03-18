@@ -5,6 +5,11 @@ A simple Node.js application for picking a random RSVP'd member from a Meetup.
 
 By [Harlan Harris](http://github.com/HarlanH), for [Data Community DC](http://datacommunitydc.org).
 
+Contributors:
+
+* [Devin Castro](http://github.com/ddcast)
+* [Chetan Shenoy](https://github.com/cshenoy)
+
 To run locally:
 
     MEETUP_API_KEY=1234567890 node web.js

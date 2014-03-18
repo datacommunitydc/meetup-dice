@@ -29,7 +29,7 @@ var meetup = require('meetup-api')(process.env.MEETUP_API_KEY);
 var events_query = {
 	'group_urlname' : 'Data-Science-DC',
 	'status' : 'upcoming,past',
-	'time' : '-1w,1w',
+	'time' : '-1w,6w',
 	'only' : 'id,name,status,yes_rsvp_count'
 };
 
@@ -97,7 +97,7 @@ get_render_meetup = function(req, res) {
 		meetup.getEvents(events_query, function(err,events) {
 			// console.log(events);
 			if (events.results.length == 0) {
-				res.status(404).send('Unknown Meetup'); // doesn't work?!
+				res.status(404).render('404', { title : 'Not found - Meetup Dice', group: events_query.group_urlname }) 
 			} else {
 				if (cache.exists(JSON.stringify(events.results[0]))) {
 					// skip to returning the answer
