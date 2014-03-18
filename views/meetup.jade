@@ -6,14 +6,19 @@ block content
     p #{event.yes_rsvp_count} RSVPs
 
   #winner
-    h1 Winner is ...?
-    img.member(src='/images/default.jpg')
+    .winner__wrapper
+      h1 Winner is ...?
+      img.member(src='/images/default.jpg')
 
   #links
+    label(style='margin-right: 1em;') Speed:
     .btn-group
-      button.btn.btn-danger.btn-lg#rolling Start Rolling
-    .btn-group
-      button.btn.btn-danger.btn-lg#stop Stop
+      button.btn.btn-default(type='button') 1
+        button.btn.btn-default(type='button') 2
+        button.btn.btn-default(type='button') 3
+        button.btn.btn-default(type='button') 4
+        button.btn.btn-default(type='button') 5
+
   p
   
   #list
