@@ -11,13 +11,20 @@ block content
       img.member(src='/images/default.jpg')
 
   #links
-    label(style='margin-right: 1em;') Speed:
-    .btn-group
-      button.btn.btn-default(type='button') 1
-        button.btn.btn-default(type='button') 2
-        button.btn.btn-default(type='button') 3
-        button.btn.btn-default(type='button') 4
-        button.btn.btn-default(type='button') 5
+    .links__control
+      .control.control__main
+        .btn-group
+          button.btn.btn-default(type='button')
+            span.glyphicon.glyphicon-play
+            span.glyphicon.glyphicon-pause
+      .control.control__speed
+        label(style='margin-right: 1em;') Speed:
+        .btn-group
+          button.btn.btn-default(type='button') 1
+          button.btn.btn-default(type='button') 2
+          button.btn.btn-default(type='button') 3
+          button.btn.btn-default(type='button') 4
+          button.btn.btn-default(type='button') 5
 
   p
   

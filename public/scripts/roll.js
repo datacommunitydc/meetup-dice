@@ -1,21 +1,18 @@
 $(function rollDocReady(){
+	var scope = $(document);
+	var links = scope.find('#links');
 	// Instance of dice
 	var dice = new DiceClass();
-	var links = $('#links');
 
 	function setSelectedSpeed() {
 		var index = dice.get('speed') - 1;
-		var btn = links.find('.btn').eq(index);
+		var btn = links.find('.control__speed .btn').eq(index);
 
 		btn.trigger('click.dice');
 	}
 
-	$('#winner').on('click.dice', '.winner__wrapper', function rollDiceHandler() {
-		setSelectedSpeed();
-	});
-
-	links.on('click.dice', '.btn', function speedHandler() {
-		var element = $(this);
+	function speedEventHandler(event, target) {
+		var element = $(target);
 
 		element
 			.toggleClass('active')
@@ -29,10 +26,28 @@ $(function rollDocReady(){
 		}
 
 		var speed = element.index() + 1;
-		
+
 		dice.set('speed', speed);
 
 		dice.stopRoll();
 		dice.startRoll();
+	}
+
+	// Register handlers
+	scope.on({
+		setSelectedSpeed: setSelectedSpeed,
+		speedEventHandler: speedEventHandler
+	});
+
+	scope.find('#winner').on('click.dice', '.winner__wrapper', function winnerDiceRollEventHandler() {
+		scope.trigger('setSelectedSpeed');
+	});
+
+	links.on('click.dice', '.control__main .btn', function mainControlEventHandler() {
+		scope.trigger('setSelectedSpeed');
+	});
+
+	links.on('click.dice', '.control__speed .btn', function speedControlEventHandler() {
+		scope.trigger('speedEventHandler', [this]);
 	});
 });

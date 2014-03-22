@@ -51,3 +51,8 @@ img.list {
 .btn-group {
 	margin-right: 10px;
 }
+
+.control {
+	display: inline-block;
+	margin-right: .5em;
+}
