@@ -56,3 +56,7 @@ img.list {
 	display: inline-block;
 	margin-right: .5em;
 }
+
+#links {
+	margin-bottom: 3em;
+}
