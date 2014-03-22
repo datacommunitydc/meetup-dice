@@ -35,6 +35,12 @@ img.list {
 	height: 300px;
 }
 
+.winner__wrapper {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+}
+
 .member-cell {
 	float: left;
 	width: 50px;
