@@ -7,9 +7,8 @@ $(function rollDocReady(){
 
 	function setSelectedSpeed() {
 		var index = dice.get('speed') - 1;
-		var btn = speedControl.eq(index);
-
-		btn.trigger('click.dice');
+		
+		scope.trigger('selectSpeedEventHandler', [index]);
 	}
 
 	function selectSpeedEventHandler(event, index) {
@@ -35,7 +34,7 @@ $(function rollDocReady(){
 		var speed = element.index() + 1;
 
 		dice.set('speed', speed);
-		
+
 		dice.startRoll();
 	}
 
