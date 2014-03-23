@@ -9,6 +9,7 @@ Contributors:
 
 * [Devin Castro](http://github.com/ddcast)
 * [Chetan Shenoy](https://github.com/cshenoy)
+* [Sheng Zhao](https://github.com/itsheng)
 
 To run locally:
 

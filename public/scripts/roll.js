@@ -1,26 +1,97 @@
-$(function(){
-	// Reference to setInterval so we can clear it
-	var rolling = null;
-	// A way to speed up the rolling
-	var timesClicked = 0;
+$(function rollDocReady(){
+	var scope = $(document);
+	var links = scope.find('#links');
+	var playControl = links.find('.control__pp .btn')
+		.add(scope.find('.winner__wrapper'));
+	var speedControl = links.find('.control__speed .btn');
+	// Instance of dice
+	var dice = new DiceClass();
 
-	$('#links').on('click', '#rolling', function() {
-		timesClicked = timesClicked + 1;
-		if(rolling) {
-			clearInterval(rolling);
+	function setSelectedSpeed() {
+		var index = dice.get('speed') - 1;
+		
+		scope.trigger('selectSpeedEventHandler', [index]);
+	}
+
+	function selectSpeedEventHandler(event, index) {
+		speedControl
+			.eq(index)
+			.trigger('click.dice');
+	}
+
+	function speedEventHandler(event, target) {
+		var element = $(target);
+
+		playControl.blur();
+
+		element.blur()
+			.toggleClass('active')
+			.siblings()
+			.removeClass('active');
+
+		var active = element.hasClass('active');
+
+		playControl.toggleClass('active', active);
+
+		if (false === active) {
+			dice.stopRoll();
+
+			return;
 		}
-		var memberList = $('.member-cell');
-		rolling = setInterval(function() { 
-			var randomIndex = Math.floor((Math.random()*memberList.length) + 1);
-			var $memberImg = $(memberList[randomIndex]).find('img');
-			$('#winner').find('img').prop("src", $memberImg.prop('src'));
-			$('#winner').find('img').prop("title", $memberImg.prop('title'));
-			$('#winner').find('h1').text('Winner is ' + $memberImg.prop('title'));
-		}, 100/timesClicked);
+
+		var speed = element.index() + 1;
+
+		dice.set('speed', speed);
+
+		dice.startRoll();
+	}
+
+	// Register handlers
+	scope.on({
+		setSelectedSpeed: setSelectedSpeed,
+		speedEventHandler: speedEventHandler,
+		selectSpeedEventHandler: selectSpeedEventHandler
 	});
 
-	$('#links').on('click', '#stop', function() {
-		clearInterval(rolling);
-		timesClicked = 0;
+	function getKey(keyCode) {
+		var name;
+		var meta = {};
+
+		if (keyCode > 48 && keyCode < 54) {
+			name = 'numeric';
+			meta.index = keyCode - 49;
+		}
+
+		if (32 === keyCode) {
+			name = 'spacebar';
+		}
+
+		return {
+			name: name || keyCode,
+			keyCode: keyCode,
+			meta: meta
+		};
+	}
+
+	scope.on('keydown.dice', function keyEventHandler(e) {
+		var key = getKey(e.keyCode);
+
+		switch (key.name) {
+			case 'spacebar':
+			e.preventDefault();
+			scope.trigger('setSelectedSpeed');
+			break;
+			case 'numeric':
+			scope.trigger('selectSpeedEventHandler', [key.meta.index]);
+			break;
+		}
+	});
+
+	playControl.on('click.dice', function playControlEventHandler() {
+		scope.trigger('setSelectedSpeed');
+	});
+
+	speedControl.on('click.dice', function speedControlEventHandler() {
+		scope.trigger('speedEventHandler', [this]);
 	});
 });
