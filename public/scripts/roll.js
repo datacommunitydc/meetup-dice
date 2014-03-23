@@ -1,14 +1,21 @@
 $(function rollDocReady(){
 	var scope = $(document);
 	var links = scope.find('#links');
+	var speedControl = links.find('.control__speed .btn');
 	// Instance of dice
 	var dice = new DiceClass();
 
 	function setSelectedSpeed() {
 		var index = dice.get('speed') - 1;
-		var btn = links.find('.control__speed .btn').eq(index);
+		var btn = speedControl.eq(index);
 
 		btn.trigger('click.dice');
+	}
+
+	function selectSpeedEventHandler(event, index) {
+		speedControl
+			.eq(index)
+			.trigger('click.dice');
 	}
 
 	function speedEventHandler(event, target) {
@@ -36,14 +43,40 @@ $(function rollDocReady(){
 	// Register handlers
 	scope.on({
 		setSelectedSpeed: setSelectedSpeed,
-		speedEventHandler: speedEventHandler
+		speedEventHandler: speedEventHandler,
+		selectSpeedEventHandler: selectSpeedEventHandler
 	});
 
+	function getKey(keyCode) {
+		var name;
+		var meta = {};
+
+		if (keyCode > 48 && keyCode < 54) {
+			name = 'numeric';
+			meta.index = keyCode - 49;
+		}
+
+		if (32 === keyCode) {
+			name = 'spacebar';
+		}
+
+		return {
+			name: name || keyCode,
+			keyCode: keyCode,
+			meta: meta
+		};
+	}
+
 	scope.on('keydown.dice', function keyEventHandler(e) {
-		switch (e.keyCode) {
-			case 32:
+		var key = getKey(e.keyCode);
+
+		switch (key.name) {
+			case 'spacebar':
 			e.preventDefault();
 			scope.trigger('setSelectedSpeed');
+			break;
+			case 'numeric':
+			scope.trigger('selectSpeedEventHandler', [key.meta.index]);
 			break;
 		}
 	});
@@ -56,7 +89,7 @@ $(function rollDocReady(){
 		scope.trigger('setSelectedSpeed');
 	});
 
-	links.on('click.dice', '.control__speed .btn', function speedControlEventHandler() {
+	speedControl.on('click.dice', function speedControlEventHandler() {
 		scope.trigger('speedEventHandler', [this]);
 	});
 });
