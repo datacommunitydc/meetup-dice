@@ -12,7 +12,7 @@ DiceClass.prototype.set = function set(name, value) {
   this.data[name] = value;
 };
 
-DiceClass.prototype.get = function set(name) {
+DiceClass.prototype.get = function get(name) {
   var value = this.data[name];
 
   return value;
