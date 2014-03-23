@@ -5,7 +5,7 @@ $(function rollDocReady(){
 		.add(scope.find('.winner__wrapper'));
 	var speedControl = links.find('.control__speed .btn');
 	// Instance of dice
-	var dice = new DiceClass();
+	var dice = new DiceClass(scope);
 
 	function setSelectedSpeed() {
 		var index = dice.get('speed') - 1;

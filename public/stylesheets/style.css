@@ -31,7 +31,8 @@ img.list {
 	max-height: 100%;
 }
 
-#winner {
+#winner,
+.winner__wrapper {
 	height: 300px;
 }
 

@@ -1,4 +1,5 @@
-function DiceClass() {
+function DiceClass(scope) {
+  this.scope = scope;
   // Data store
   this.data = {
     // Reference to setInterval so we can clear it
@@ -34,16 +35,21 @@ DiceClass.prototype.accelerate = function accelerate(increment) {
 
 DiceClass.prototype.startRoll = function startRoll() {
   var speed = this.get('speed');
-  var rolling = this.get('rolling');
-  if(rolling) {
-    clearInterval(rolling);
-  }
-  var memberList = $('.member-cell');
-  this.set('rolling', setInterval(function rollingInterval() { 
+  var memberList = this.scope.find('.member-cell');
+  var winner = this.scope.find('#winner');
+  var winnerImg = winner.find('img');
+  var winnerHead = winner.find('h1');
+  this.stopRoll();
+  this.set('rolling', setInterval($.proxy(function rollingInterval() { 
+    if (false === this.get('rolling')) {
+      return;
+    }
     var randomIndex = Math.floor((Math.random()*memberList.length) + 1);
     var $memberImg = $(memberList[randomIndex]).find('img');
-    $('#winner').find('img').prop("src", $memberImg.prop('src'));
-    $('#winner').find('img').prop("title", $memberImg.prop('title'));
-    $('#winner').find('h1').text('Winner is ' + $memberImg.prop('title'));
-  }, 100/speed));
+    winnerImg.attr({
+      src: $memberImg.prop('src'),
+      title: $memberImg.prop('title')
+    });
+    winnerHead.text('Winner is ' + $memberImg.prop('title'));
+  }, this), 100/speed));
 };
