@@ -39,6 +39,15 @@ $(function rollDocReady(){
 		speedEventHandler: speedEventHandler
 	});
 
+	scope.on('keydown.dice', function keyEventHandler(e) {
+		switch (e.keyCode) {
+			case 32:
+			e.preventDefault();
+			scope.trigger('setSelectedSpeed');
+			break;
+		}
+	});
+
 	scope.find('#winner').on('click.dice', '.winner__wrapper', function winnerDiceRollEventHandler() {
 		scope.trigger('setSelectedSpeed');
 	});
