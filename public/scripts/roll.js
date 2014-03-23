@@ -35,8 +35,7 @@ $(function rollDocReady(){
 		var speed = element.index() + 1;
 
 		dice.set('speed', speed);
-
-		dice.stopRoll();
+		
 		dice.startRoll();
 	}
 
