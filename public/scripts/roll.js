@@ -1,6 +1,8 @@
 $(function rollDocReady(){
 	var scope = $(document);
 	var links = scope.find('#links');
+	var playControl = links.find('.control__pp .btn')
+		.add(scope.find('.winner__wrapper'));
 	var speedControl = links.find('.control__speed .btn');
 	// Instance of dice
 	var dice = new DiceClass();
@@ -20,12 +22,18 @@ $(function rollDocReady(){
 	function speedEventHandler(event, target) {
 		var element = $(target);
 
-		element
+		playControl.blur();
+
+		element.blur()
 			.toggleClass('active')
 			.siblings()
 			.removeClass('active');
 
-		if (false === element.hasClass('active')) {
+		var active = element.hasClass('active');
+
+		playControl.toggleClass('active', active);
+
+		if (false === active) {
 			dice.stopRoll();
 
 			return;
@@ -79,11 +87,7 @@ $(function rollDocReady(){
 		}
 	});
 
-	scope.find('#winner').on('click.dice', '.winner__wrapper', function winnerDiceRollEventHandler() {
-		scope.trigger('setSelectedSpeed');
-	});
-
-	links.on('click.dice', '.control__main .btn', function mainControlEventHandler() {
+	playControl.on('click.dice', function playControlEventHandler() {
 		scope.trigger('setSelectedSpeed');
 	});
 
