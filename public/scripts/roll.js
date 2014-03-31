@@ -146,7 +146,7 @@ $(function rollDocReady(){
 			break;
 			case 'numeric':
 
-			if (!clapping) {
+			if (!clapping || !window.MicrophoneAnalyzer) {
 				scope.trigger('selectSpeedEventHandler', [key.meta.index]);
 			}
 

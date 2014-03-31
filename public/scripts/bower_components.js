@@ -1582,7 +1582,7 @@ c>-1?this.values[c]=b:(this.keys.push(a),this.values.push(b))},has:function(a){r
 
   var AudioRangePrototype = Object.create(HTMLElement.prototype);
 
-  document.registerElement('audio-range', {
+  window.AudioRange = document.registerElement('audio-range', {
     prototype: AudioRangePrototype
   });
 
@@ -1622,7 +1622,7 @@ c>-1?this.values[c]=b:(this.keys.push(a),this.values.push(b))},has:function(a){r
     }, proxy(micInputHandler, this));
   };
 
-  document.registerElement('microphone-analyzer', {
+  window.MicrophoneAnalyzer = document.registerElement('microphone-analyzer', {
     prototype: MicrophoneAnalyzerPrototype
   });
 
