@@ -4,34 +4,6 @@
   "scripts": {
     "start": "node web.js"
   },
-  "concat_src": {
-    "bower_components": [
-      "bower_components/underscore/underscore.js",
-      "bower_components/platform/platform.js",
-      "bower_components/microphone/microphone.js",
-      "bower_components/microphone-analyzer/microphone-analyzer.js"
-    ]
-  },
-  "copy_files": [
-    {
-      "expand": true,
-      "cwd": "bower_components/animate.css/",
-      "src": ["animate.css"],
-      "dest": "public/stylesheets/"
-    },
-    {
-      "expand": true,
-      "cwd": "bower_components/platform/",
-      "src": ["platform.js.map"],
-      "dest": "public/scripts/"
-    },
-    {
-      "expand": true,
-      "cwd": "bower_components/polymer/",
-      "src": ["polymer.js.map"],
-      "dest": "public/scripts/"
-    }
-  ],
   "dependencies": {
     "express": "3.4.4",
     "meetup-api": "0.1.1",

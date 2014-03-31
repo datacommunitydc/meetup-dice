@@ -1,6 +1,7 @@
 module.exports = function(grunt) {
   
-  var pkg = grunt.file.readJSON('package.json');
+  var pkg = grunt.file.readJSON('package.json'),
+      grnt = grunt.file.readJSON('grunt.json');
 
   grunt.initConfig({
     pkg: pkg,
@@ -9,13 +10,13 @@ module.exports = function(grunt) {
         separator: "\n;"
       },
       dist: {
-        src: pkg.concat_src.bower_components,
+        src: grnt.concat_src.bower_components,
         dest: 'public/scripts/bower_components.js'
       }
     },
     copy: {
       main: {
-        files: pkg.copy_files
+        files: grnt.copy_files
       }
     }
   });
