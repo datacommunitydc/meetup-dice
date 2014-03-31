@@ -53,6 +53,40 @@ img.list {
 	margin-right: 10px;
 }
 
+.btn {
+	transition: width 1s;
+}
+
+.pp__clap.btn {
+	width: 3em;
+	text-align: right;
+}
+
+.pp__clap.btn--active {
+	width: 5em;
+}
+
+.pp__clap .glyphicon {
+	transition: left 1s;
+	left: 0;
+}
+
+.pp__clap.btn--active .glyphicon {
+	left: .3em;
+}
+
+.claptext {
+	transition: opacity 1s;
+	opacity: 0;
+	position: absolute;
+	left: .5em;
+}
+
+.claptext.claptext--visible {
+	visibility: visible;
+	opacity: 1;
+}
+
 .control {
 	display: inline-block;
 	margin-right: .5em;

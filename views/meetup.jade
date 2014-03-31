@@ -1,6 +1,13 @@
 extends layout
 
 block content
+  microphone-analyzer(unit='.75', overlap='.25', channels='1')
+    audio-range(start='0', end='1')
+    audio-range(start='1.01', end='2')
+    audio-range(start='2.01', end='3')
+    audio-range(start='3.01', end='4')
+    audio-range(start='4.01', end='5')
+
   #eventdesc
     h1= event.name
     p #{event.yes_rsvp_count} RSVPs
@@ -17,6 +24,9 @@ block content
           button.btn.btn-default(type='button')
             span.glyphicon.glyphicon-play
             span.glyphicon.glyphicon-pause
+          button.btn.btn-danger.pp__clap.disabled(type='button')
+            span.claptext Clap!
+            span.glyphicon.glyphicon-heart-empty
       .control.control__speed
         label(style='margin-right: 1em;') Speed:
         .btn-group

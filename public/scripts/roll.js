@@ -1,9 +1,14 @@
 $(function rollDocReady(){
 	var scope = $(document);
 	var links = scope.find('#links');
-	var playControl = links.find('.control__pp .btn')
+	var playControl = links.find('.control__pp .btn:first')
 		.add(scope.find('.winner__wrapper'));
 	var speedControl = links.find('.control__speed .btn');
+	var clapControl = links.find('.pp__clap.btn');
+	var lastSpeedIndex = null;
+	var clapping = false;
+	var clapInterval = null;
+
 	// Instance of dice
 	var dice = new DiceClass(scope);
 
@@ -14,6 +19,7 @@ $(function rollDocReady(){
 	}
 
 	function selectSpeedEventHandler(event, index) {
+		lastSpeedIndex = index;
 		speedControl
 			.eq(index)
 			.trigger('click.dice');
@@ -32,9 +38,14 @@ $(function rollDocReady(){
 		var active = element.hasClass('active');
 
 		playControl.toggleClass('active', active);
+		clapControl.toggleClass('disabled', !active);
 
 		if (false === active) {
 			dice.stopRoll();
+
+			if (clapping) {
+				clapControl.trigger('click.dice');
+			}
 
 			return;
 		}
@@ -46,11 +57,37 @@ $(function rollDocReady(){
 		dice.startRoll();
 	}
 
+	function clapEventHandler (event, target) {
+		var element = $(target);
+		var claptext = element.find('.claptext');
+		var icon = element.find('.glyphicon');
+
+		clapping = !clapping;
+
+		element.toggleClass('btn--active', clapping);
+
+		if (clapping) {
+			setTimeout(function toggleClapBtn() {
+				claptext.toggleClass('claptext--visible', true);
+
+				clapInterval = setInterval(function clapIntervalHandler() {
+					var toggle = clapping && dice.get('rolling') ? null : false;
+
+					icon.toggleClass('animated pulse', toggle);
+				}, 700);
+			}, 1000);
+		} else {
+			clearInterval(clapInterval);
+			claptext.toggleClass('claptext--visible', false);
+		}
+	}
+
 	// Register handlers
 	scope.on({
 		setSelectedSpeed: setSelectedSpeed,
 		speedEventHandler: speedEventHandler,
-		selectSpeedEventHandler: selectSpeedEventHandler
+		selectSpeedEventHandler: selectSpeedEventHandler,
+		clapEventHandler: clapEventHandler
 	});
 
 	function getKey(keyCode) {
@@ -73,6 +110,32 @@ $(function rollDocReady(){
 		};
 	}
 
+	var microphoneAnalyzer = $('microphone-analyzer');
+
+	microphoneAnalyzer[0].valuefilter = function (rms) {
+	  var vol = rms * 100;
+
+	  return vol;
+	};
+
+	microphoneAnalyzer.on('air', function (e) {
+		var speedIndex;
+
+		if (clapping && dice.get('rolling')) {
+			speedIndex = e.originalEvent.detail.audioRange.index;
+
+			if (lastSpeedIndex !== speedIndex) {
+				lastSpeedIndex = speedIndex;
+
+				scope.trigger('selectSpeedEventHandler', [speedIndex]);
+			}
+		}
+	});
+
+	clapControl.on('click.dice', function clapControlEventHandler() {
+		scope.trigger('clapEventHandler', [this]);
+	});
+
 	scope.on('keydown.dice', function keyEventHandler(e) {
 		var key = getKey(e.keyCode);
 
@@ -82,7 +145,11 @@ $(function rollDocReady(){
 			scope.trigger('setSelectedSpeed');
 			break;
 			case 'numeric':
-			scope.trigger('selectSpeedEventHandler', [key.meta.index]);
+
+			if (!clapping) {
+				scope.trigger('selectSpeedEventHandler', [key.meta.index]);
+			}
+
 			break;
 		}
 	});
