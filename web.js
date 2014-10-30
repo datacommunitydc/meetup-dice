@@ -29,7 +29,7 @@ var meetup = require('meetup-api')(process.env.MEETUP_API_KEY);
 var events_query = {
 	'group_urlname' : 'Data-Science-DC',
 	'status' : 'upcoming,past',
-	'time' : '-1w,6w',
+	'time' : '-1d,6w',
 	'only' : 'id,name,status,yes_rsvp_count'
 };
 
